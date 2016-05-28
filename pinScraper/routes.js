@@ -7,8 +7,8 @@ var item = require('./models/Item.model');
 
 router.post('/scrape', function(req, res) {
   var url = req.body.url;
-  
-  if (url.indexOf("pinterest") > -1) {
+
+  if (url.indexOf("github") > -1) {
     request(url, function(err, resp, body) {
       console.log(url);
 
@@ -18,9 +18,10 @@ router.post('/scrape', function(req, res) {
         var pin = {};
         var $ = cheerio.load(body);
 
-        var img = $("meta[itemprop = 'image']").get(1);
-        var $img = $(img).attr('content');
-        var $desc = $("meta[itemprop = 'text']").attr('content');
+        var $img = $("img.avatar.rounded-2").attr("src") //.attr('src')
+        var $desc = $(".boxed-group.flush h3").text().match("[0-9]+")
+
+        console.log("the image link is: " + $img, "the desc is: " + $desc)
 
         var pin = {
           img: $img,
@@ -38,3 +39,5 @@ router.post('/scrape', function(req, res) {
 })
 
 module.exports = router;
+
+//    https://github.com/kelsonic
